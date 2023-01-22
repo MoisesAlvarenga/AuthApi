@@ -59,8 +59,8 @@ builder.Services.AddAutoMapper(typeof(Program));
         c.SwaggerDoc("v1",
             new OpenApiInfo
             {
-                Title = "Estudos Gerais",
-                Description = "Estudos gerais sobre diversos temas do Dot.Net",
+                Title = "AuthApi",
+                Description = "Api para autenticação de usuários",
                 Version = "v1",
                 Contact = new OpenApiContact()
                 {
