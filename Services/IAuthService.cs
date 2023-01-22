@@ -4,5 +4,6 @@ namespace AuthApi.Services;
 
 public interface IAuthService
 {
-    Task<User> RegisterUser(User user);
+    Task<bool> RegisterUser(AuthenticateRequest user);
+    Task<AuthenticateResponse> Login(AuthenticateRequest model);
 }

@@ -23,7 +23,7 @@ public interface IMongoRepository<TDocument> where TDocument : IDocument
 
     void InsertOne(TDocument document);
 
-    Task InsertOneAsync(TDocument document);
+    Task<TDocument> InsertOneAsync(TDocument document);
 
     void InsertMany(ICollection<TDocument> documents);
 

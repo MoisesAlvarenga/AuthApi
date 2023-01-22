@@ -1,12 +1,20 @@
+using System.Text;
 using AuthApi.AuthEndpoints;
 using AuthApi.Infrastructure;
 using AuthApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using AutoMapper;
+using AuthApi.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
+
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
 
@@ -15,11 +23,33 @@ builder.Services.AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvid
 builder.Services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 
+var jwtSecretKey = builder.Configuration.GetSection("AppSettings:Secret")?.Value;
 
+builder.Services.AddAuthorization();
+
+builder.Services.AddAuthentication( x => {
+
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer( x => {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecretKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                }; 
+            });
 
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 //#region swagger
     builder.Services.AddSwaggerGen();

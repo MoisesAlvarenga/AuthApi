@@ -74,9 +74,11 @@ public class MongoRepository<TDocument> : IMongoRepository<TDocument>
         _collection.InsertOne(document);
     }
 
-    public virtual Task InsertOneAsync(TDocument document)
+    public async Task<TDocument> InsertOneAsync(TDocument document)
     {
-        return Task.Run(() => _collection.InsertOneAsync(document));
+        await _collection.InsertOneAsync(document);
+
+        return document;
     }
 
     public void InsertMany(ICollection<TDocument> documents)

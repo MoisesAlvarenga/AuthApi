@@ -1,7 +1,7 @@
 using AuthApi.Infrastructure;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace AuthApi.Models;
+namespace AuthApi.Entities;
 
 [BsonCollection("user")]
 public class User : Document
