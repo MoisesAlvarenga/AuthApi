@@ -5,7 +5,7 @@ namespace AuthApi.Entities;
 
 [BsonCollection("user")]
 public class User : Document
-{
+{   
     [BsonElement("email")]
     public string Email { get; set; }
     [BsonElement("password")]

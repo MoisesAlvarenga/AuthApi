@@ -29,22 +29,24 @@ var jwtSecretKey = builder.Configuration.GetSection("AppSettings:Secret")?.Value
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddAuthentication( x => {
+builder.Services.AddAuthentication(x =>
+{
 
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-            }).AddJwtBearer( x => {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecretKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                }; 
-            });
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecretKey)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -52,23 +54,23 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(Program));
 
 //#region swagger
-    builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();
 
-    builder.Services.AddSwaggerGen(c =>
-    {
-        c.SwaggerDoc("v1",
-            new OpenApiInfo
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1",
+        new OpenApiInfo
+        {
+            Title = "AuthApi",
+            Description = "Api para autenticação de usuários",
+            Version = "v1",
+            Contact = new OpenApiContact()
             {
-                Title = "AuthApi",
-                Description = "Api para autenticação de usuários",
-                Version = "v1",
-                Contact = new OpenApiContact()
-                {
-                    Name = "Moises Alvarenga",
-                    Url = new Uri("https://github.com/MoisesAlvarenga"),
-                }
-            });
-    });
+                Name = "Moises Alvarenga",
+                Url = new Uri("https://github.com/MoisesAlvarenga"),
+            }
+        });
+});
 
 //#endregion
 
