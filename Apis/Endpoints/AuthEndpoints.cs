@@ -25,7 +25,7 @@ public static class AuthEndpoints
 
         app.MapPost("/api/v1/auth/login", async (AuthenticateRequest model, IAuthService service) => {
             
-                var response = await service.Login(model);
+                var response = await service.Login(model); 
 
                 if(response == null)
                 {   
