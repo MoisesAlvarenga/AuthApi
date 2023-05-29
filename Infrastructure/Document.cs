@@ -5,7 +5,11 @@ namespace AuthApi.Infrastructure;
 
 
 public abstract class Document : IDocument
-{
-    public ObjectId Id { get; set; }
-    public DateTime CreatedAt => Id.CreationTime;
+{   
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? Id { get; set; }
+
+    [BsonElement("createdAt")]
+    public DateTime CreatedAt => DateTime.Now;
 }

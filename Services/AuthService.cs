@@ -18,26 +18,11 @@ public class AuthService : IAuthService
         _jwtUtils = jwtUtils;
         _mapper = mapper;
     }
-
-    public async Task<bool> RegisterUser(AuthenticateRequest model)
-    {   
-
-        var user = _mapper.Map<User>(model);
-        var hashPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
-
-        user.Password = hashPassword;
-
-        return await _userRepository.InsertOneAsync(user) != null;
-
-        
-    }
-
-
     public async Task<AuthenticateResponse> Login(AuthenticateRequest model)
     {
         var user = await _userRepository.FindOneAsync(x => x.Email == model.Email);
 
-        if(user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+        if(user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
         {
             return null;
         }
